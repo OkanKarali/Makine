@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hesap Makinesi (Hızlı)</title>
+  <title>Hesap Makinesi (iPad Uyumlu)</title>
   <style>
     body { background: #e0e7ff; font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; }
     .calculator { width: 320px; margin: 40px auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); padding: 16px; border: 1px solid #c7d2fe; }
@@ -24,37 +24,37 @@
     <div id="live-result" class="live-result"></div>
     <div class="buttons">
       <div class="row">
-        <input type="button" class="button" value="C" onclick="clearDisplay()" ontouchstart="clearDisplay();">
-        <input type="button" class="button" value="←" onclick="backspace()" ontouchstart="backspace();">
-        <input type="button" class="button" value="%" onclick="insert('%')" ontouchstart="insert('%');">
-        <input type="button" class="button op" value="÷" onclick="insert('/')" ontouchstart="insert('/');">
+        <input type="button" class="button" id="clearBtn" value="C">
+        <input type="button" class="button" id="backBtn" value="←">
+        <input type="button" class="button" data-value="%" value="%">
+        <input type="button" class="button op" data-value="/" value="÷">
       </div>
       <div class="row">
-        <input type="button" class="button" value="7" onclick="insert('7')" ontouchstart="insert('7');">
-        <input type="button" class="button" value="8" onclick="insert('8')" ontouchstart="insert('8');">
-        <input type="button" class="button" value="9" onclick="insert('9')" ontouchstart="insert('9');">
-        <input type="button" class="button op" value="×" onclick="insert('*')" ontouchstart="insert('*');">
+        <input type="button" class="button" data-value="7" value="7">
+        <input type="button" class="button" data-value="8" value="8">
+        <input type="button" class="button" data-value="9" value="9">
+        <input type="button" class="button op" data-value="*" value="×">
       </div>
       <div class="row">
-        <input type="button" class="button" value="4" onclick="insert('4')" ontouchstart="insert('4');">
-        <input type="button" class="button" value="5" onclick="insert('5')" ontouchstart="insert('5');">
-        <input type="button" class="button" value="6" onclick="insert('6')" ontouchstart="insert('6');">
-        <input type="button" class="button op" value="-" onclick="insert('-')" ontouchstart="insert('-');">
+        <input type="button" class="button" data-value="4" value="4">
+        <input type="button" class="button" data-value="5" value="5">
+        <input type="button" class="button" data-value="6" value="6">
+        <input type="button" class="button op" data-value="-" value="-">
       </div>
       <div class="row">
-        <input type="button" class="button" value="1" onclick="insert('1')" ontouchstart="insert('1');">
-        <input type="button" class="button" value="2" onclick="insert('2')" ontouchstart="insert('2');">
-        <input type="button" class="button" value="3" onclick="insert('3')" ontouchstart="insert('3');">
-        <input type="button" class="button op" value="+" onclick="insert('+')" ontouchstart="insert('+');">
+        <input type="button" class="button" data-value="1" value="1">
+        <input type="button" class="button" data-value="2" value="2">
+        <input type="button" class="button" data-value="3" value="3">
+        <input type="button" class="button op" data-value="+" value="+">
       </div>
       <div class="row">
-        <input type="button" class="button" value="0" onclick="insert('0')" ontouchstart="insert('0');">
-        <input type="button" class="button" value="." onclick="insert('.')" ontouchstart="insert('.');">
-        <input type="button" class="button" value="(" onclick="insert('(')" ontouchstart="insert('(');">
-        <input type="button" class="button" value=")" onclick="insert(')')" ontouchstart="insert(')');">
+        <input type="button" class="button" data-value="0" value="0">
+        <input type="button" class="button" data-value="." value=".">
+        <input type="button" class="button" data-value="(" value="(">
+        <input type="button" class="button" data-value=")" value=")">
       </div>
     </div>
-    <input type="button" class="button eq wide" value="=" onclick="calculate()" ontouchstart="calculate();">
+    <input type="button" class="button eq wide" id="eqBtn" value="=">
   </div>
   <script>
     var display = document.getElementById('calc-display');
@@ -115,6 +115,36 @@
         live.innerHTML = "";
       }
     }
+
+    // Olayları tek seferde ve doğru şekilde ekle
+    window.onload = function() {
+      var buttons = document.getElementsByClassName('button');
+      var isTouch = 'ontouchstart' in window;
+      for (var i = 0; i < buttons.length; i++) {
+        (function(btn){
+          var val = btn.getAttribute('data-value');
+          if (val !== null) {
+            var handler = function(e) {
+              insert(val);
+              e.preventDefault();
+            };
+            if (isTouch) {
+              btn.addEventListener('touchstart', handler, false);
+            } else {
+              btn.addEventListener('click', handler, false);
+            }
+          }
+        })(buttons[i]);
+      }
+      // Diğer özel butonlar için
+      var clearBtn = document.getElementById('clearBtn');
+      var backBtn = document.getElementById('backBtn');
+      var eqBtn = document.getElementById('eqBtn');
+      var eventName = isTouch ? 'touchstart' : 'click';
+      clearBtn.addEventListener(eventName, function(e){ clearDisplay(); e.preventDefault(); }, false);
+      backBtn.addEventListener(eventName, function(e){ backspace(); e.preventDefault(); }, false);
+      eqBtn.addEventListener(eventName, function(e){ calculate(); e.preventDefault(); }, false);
+    };
     updateLiveResult();
   </script>
 </body>
