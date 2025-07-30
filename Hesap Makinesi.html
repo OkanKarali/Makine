@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Modern Hesap Makinesi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+    }
+    .calculator {
+      background: linear-gradient(135deg, #f7fafc 60%, #c7d2fe 100%);
+      box-shadow: 0 10px 28px 0 rgba(0,0,0,0.16), 0 2px 4px 0 rgba(0,0,0,0.14);
+      transition: box-shadow 0.3s;
+    }
+    .calculator:focus-within {
+      box-shadow: 0 0 0 4px #6366f1;
+    }
+    .button:active {
+      background: #e0e7ff;
+    }
+    ::selection {
+      background: #6366f1;
+      color: #fff;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-200 to-indigo-500">
+
+  <div class="calculator w-full max-w-sm p-6 rounded-3xl bg-white flex flex-col gap-4 shadow-xl border border-indigo-100">
+    <div class="w-full flex flex-col rounded-lg overflow-hidden mb-2 bg-indigo-50">
+      <input
+        id="calc-display"
+        class="w-full text-right text-2xl md:text-3xl py-5 px-4 bg-indigo-50 focus:outline-none"
+        type="text"
+        value="0"
+        readonly
+      />
+      <div id="live-result" class="w-full text-right text-indigo-700 bg-indigo-50 px-4 pb-2 text-lg" style="min-height:1.5rem;"></div>
+    </div>
+    <div class="grid grid-cols-4 gap-3">
+      <button class="button py-3 font-semibold text-indigo-700 bg-indigo-100 rounded-xl hover:bg-indigo-200 transition" onclick="clearDisplay()">C</button>
+      <button class="button py-3 font-semibold text-indigo-700 bg-indigo-100 rounded-xl hover:bg-indigo-200 transition" onclick="backspace()">←</button>
+      <button class="button py-3 font-semibold text-indigo-700 bg-indigo-100 rounded-xl hover:bg-indigo-200 transition" onclick="insert('%')">%</button>
+      <button class="button py-3 font-semibold text-white bg-indigo-400 rounded-xl hover:bg-indigo-500 transition" onclick="insert('/')">÷</button>
+
+      <button class="button py-3 font-semibold text-gray-800 bg-gray-100 rounded-xl hover:bg-gray-200 transition" onclick="insert('7')">7</button>
+      <button class="button py-3 font-semibold text-gray-800 bg-gray-100 rounded-xl hover:bg-gray-200 transition" onclick="insert('8')">8</button>
+      <button class="button py-3 font-semibold text-gray-800 bg-gray-100 rounded-xl hover:bg-gray-200 transition" onclick="insert('9')">9</button>
+      <button class="button py-3 font-semibold text-white bg-indigo-400 rounded-xl hover:bg-indigo-500 transition" onclick="insert('*')">×</button>
+      
+      <button class="button py-3 font-semibold text-gray-800 bg-gray-100 rounded-xl hover:bg-gray-200 transition" onclick="insert('4')">4</button>
+      <button class="button py-3 font-semibold text-gray-800 bg-gray-100 rounded-xl hover:bg-gray-200 transition" onclick="insert('5')">5</button>
+      <button class="button py-3 font-semibold text-gray-800 bg-gray-100 rounded-xl hover:bg-gray-200 transition" onclick="insert('6')">6</button>
+      <button class="button py-3 font-semibold text-white bg-indigo-400 rounded-xl hover:bg-indigo-500 transition" onclick="insert('-')">-</button>
+      
+      <button class="button py-3 font-semibold text-gray-800 bg-gray-100 rounded-xl hover:bg-gray-200 transition" onclick="insert('1')">1</button>
+      <button class="button py-3 font-semibold text-gray-800 bg-gray-100 rounded-xl hover:bg-gray-200 transition" onclick="insert('2')">2</button>
+      <button class="button py-3 font-semibold text-gray-800 bg-gray-100 rounded-xl hover:bg-gray-200 transition" onclick="insert('3')">3</button>
+      <button class="button py-3 font-semibold text-white bg-indigo-400 rounded-xl hover:bg-indigo-500 transition" onclick="insert('+')">+</button>
+      
+      <button class="button py-3 font-semibold text-gray-800 bg-gray-100 rounded-xl hover:bg-gray-200 transition" onclick="insert('0')">0</button>
+      <button class="button py-3 font-semibold text-gray-800 bg-gray-100 rounded-xl hover:bg-gray-200 transition" onclick="insert('.')">.</button>
+      <button class="button py-3 font-semibold text-indigo-700 bg-indigo-100 rounded-xl hover:bg-indigo-200 transition" onclick="insert('(')">(</button>
+      <button class="button py-3 font-semibold text-indigo-700 bg-indigo-100 rounded-xl hover:bg-indigo-200 transition" onclick="insert(')')">)</button>
+      
+      <button class="col-span-4 button py-3 font-semibold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition mt-2 text-lg" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    let display = document.getElementById('calc-display');
+    let lastResult = '';
+    function insert(val) {
+      if (display.value === '0' || display.value === lastResult) {
+        display.value = '';
+      }
+      display.value += val;
+      updateLiveResult();
+    }
+    function clearDisplay() {
+      display.value = '0';
+      updateLiveResult();
+    }
+    function backspace() {
+      if (display.value.length > 1) {
+        display.value = display.value.slice(0, -1);
+      } else {
+        display.value = '0';
+      }
+      updateLiveResult();
+    }
+    function calculate() {
+      try {
+        let expression = display.value
+          .replace(/÷/g, '/')
+          .replace(/×/g, '*')
+          .replace(/%/g, '/100');
+        let result = Function('"use strict";return (' + expression + ')')();
+        if (result === undefined || isNaN(result)) {
+          display.value = "Hata";
+        } else {
+          display.value = result;
+          lastResult = result.toString();
+        }
+      } catch (e) {
+        display.value = "Hata";
+      }
+      updateLiveResult();
+    }
+
+    function updateLiveResult() {
+      let live = document.getElementById('live-result');
+      let expression = display.value
+        .replace(/÷/g, '/')
+        .replace(/×/g, '*')
+        .replace(/%/g, '/100');
+      try {
+        // Show nothing for empty or single-zero state etc.
+        if (
+          expression.trim() === "" ||
+          expression === "0" ||
+          expression === lastResult ||
+          /[^\d\(\)\+\-\*\/\.\/]/.test(expression)
+        ) {
+          live.textContent = "";
+          return;
+        }
+        let result = Function('"use strict";return (' + expression + ')')();
+        if (result === undefined || isNaN(result)) {
+          live.textContent = "";
+        } else {
+          live.textContent = "= " + result;
+        }
+      } catch (e) {
+        live.textContent = "";
+      }
+    }
+    // Klavyeden giriş için Enter (=) ve Escape (C) tuşları
+    document.addEventListener('keydown', function(e) {
+      if(e.key === "Enter") calculate();
+      if(e.key === "Escape") clearDisplay();
+      if(e.key === "Backspace") backspace();
+      if("0123456789+-*/().".includes(e.key)) insert(e.key);
+      if(e.key === "%") insert('%');
+      // For live update on manual key entry (handle keys that just change existing input)
+      setTimeout(updateLiveResult, 1);
+    });
+
+    // İlk renderda da bir kez çalıştır
+    updateLiveResult();
+  </script>
+</body>
+</html>
+
