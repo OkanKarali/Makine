@@ -3,84 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hesap Makinesi (Eski iPad Uyumlu)</title>
+  <title>Hesap Makinesi (Hızlı)</title>
   <style>
-    body {
-      background: #e0e7ff;
-      font-family: Arial, Helvetica, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    .calculator {
-      width: 320px;
-      margin: 40px auto;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-      padding: 16px;
-      border: 1px solid #c7d2fe;
-    }
-    .display {
-      width: 100%;
-      height: 48px;
-      font-size: 24px;
-      text-align: right;
-      margin-bottom: 4px;
-      padding: 8px;
-      border: none;
-      background: #f7fafc;
-      border-radius: 8px;
-    }
-    .live-result {
-      width: 100%;
-      min-height: 20px;
-      text-align: right;
-      color: #6366f1;
-      font-size: 16px;
-      margin-bottom: 8px;
-      background: #f7fafc;
-      border-radius: 8px;
-      padding-right: 8px;
-    }
-    .buttons {
-      width: 100%;
-      display: table;
-      border-spacing: 8px;
-    }
-    .row {
-      display: table-row;
-    }
-    .button {
-      display: table-cell;
-      width: 25%;
-      padding: 12px 0;
-      margin: 0;
-      font-size: 18px;
-      font-weight: bold;
-      background: #e0e7ff;
-      color: #222;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      text-align: center;
-      transition: background 0.2s;
-    }
-    .button:active {
-      background: #c7d2fe;
-    }
-    .button.op {
-      background: #6366f1;
-      color: #fff;
-    }
-    .button.eq {
-      background: #4f46e5;
-      color: #fff;
-    }
-    .button.wide {
-      width: 100%;
-      display: block;
-      margin-top: 8px;
-    }
+    body { background: #e0e7ff; font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; }
+    .calculator { width: 320px; margin: 40px auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); padding: 16px; border: 1px solid #c7d2fe; }
+    .display { width: 100%; height: 48px; font-size: 24px; text-align: right; margin-bottom: 4px; padding: 8px; border: none; background: #f7fafc; border-radius: 8px; }
+    .live-result { width: 100%; min-height: 20px; text-align: right; color: #6366f1; font-size: 16px; margin-bottom: 8px; background: #f7fafc; border-radius: 8px; padding-right: 8px; }
+    .buttons { width: 100%; display: table; border-spacing: 8px; }
+    .row { display: table-row; }
+    .button { display: table-cell; width: 25%; padding: 12px 0; font-size: 18px; font-weight: bold; background: #e0e7ff; color: #222; border: none; border-radius: 8px; cursor: pointer; text-align: center; }
+    .button:active { background: #c7d2fe; }
+    .button.op { background: #6366f1; color: #fff; }
+    .button.eq { background: #4f46e5; color: #fff; }
+    .button.wide { width: 100%; display: block; margin-top: 8px; }
   </style>
 </head>
 <body>
@@ -89,37 +24,37 @@
     <div id="live-result" class="live-result"></div>
     <div class="buttons">
       <div class="row">
-        <button class="button" onclick="clearDisplay()">C</button>
-        <button class="button" onclick="backspace()">←</button>
-        <button class="button" onclick="insert('%')">%</button>
-        <button class="button op" onclick="insert('/')">÷</button>
+        <input type="button" class="button" value="C" onclick="clearDisplay()" ontouchstart="clearDisplay();">
+        <input type="button" class="button" value="←" onclick="backspace()" ontouchstart="backspace();">
+        <input type="button" class="button" value="%" onclick="insert('%')" ontouchstart="insert('%');">
+        <input type="button" class="button op" value="÷" onclick="insert('/')" ontouchstart="insert('/');">
       </div>
       <div class="row">
-        <button class="button" onclick="insert('7')">7</button>
-        <button class="button" onclick="insert('8')">8</button>
-        <button class="button" onclick="insert('9')">9</button>
-        <button class="button op" onclick="insert('*')">×</button>
+        <input type="button" class="button" value="7" onclick="insert('7')" ontouchstart="insert('7');">
+        <input type="button" class="button" value="8" onclick="insert('8')" ontouchstart="insert('8');">
+        <input type="button" class="button" value="9" onclick="insert('9')" ontouchstart="insert('9');">
+        <input type="button" class="button op" value="×" onclick="insert('*')" ontouchstart="insert('*');">
       </div>
       <div class="row">
-        <button class="button" onclick="insert('4')">4</button>
-        <button class="button" onclick="insert('5')">5</button>
-        <button class="button" onclick="insert('6')">6</button>
-        <button class="button op" onclick="insert('-')">-</button>
+        <input type="button" class="button" value="4" onclick="insert('4')" ontouchstart="insert('4');">
+        <input type="button" class="button" value="5" onclick="insert('5')" ontouchstart="insert('5');">
+        <input type="button" class="button" value="6" onclick="insert('6')" ontouchstart="insert('6');">
+        <input type="button" class="button op" value="-" onclick="insert('-')" ontouchstart="insert('-');">
       </div>
       <div class="row">
-        <button class="button" onclick="insert('1')">1</button>
-        <button class="button" onclick="insert('2')">2</button>
-        <button class="button" onclick="insert('3')">3</button>
-        <button class="button op" onclick="insert('+')">+</button>
+        <input type="button" class="button" value="1" onclick="insert('1')" ontouchstart="insert('1');">
+        <input type="button" class="button" value="2" onclick="insert('2')" ontouchstart="insert('2');">
+        <input type="button" class="button" value="3" onclick="insert('3')" ontouchstart="insert('3');">
+        <input type="button" class="button op" value="+" onclick="insert('+')" ontouchstart="insert('+');">
       </div>
       <div class="row">
-        <button class="button" onclick="insert('0')">0</button>
-        <button class="button" onclick="insert('.')">.</button>
-        <button class="button" onclick="insert('(')">(</button>
-        <button class="button" onclick="insert(')')">)</button>
+        <input type="button" class="button" value="0" onclick="insert('0')" ontouchstart="insert('0');">
+        <input type="button" class="button" value="." onclick="insert('.')" ontouchstart="insert('.');">
+        <input type="button" class="button" value="(" onclick="insert('(')" ontouchstart="insert('(');">
+        <input type="button" class="button" value=")" onclick="insert(')')" ontouchstart="insert(')');">
       </div>
     </div>
-    <button class="button eq wide" onclick="calculate()">=</button>
+    <input type="button" class="button eq wide" value="=" onclick="calculate()" ontouchstart="calculate();">
   </div>
   <script>
     var display = document.getElementById('calc-display');
@@ -180,29 +115,6 @@
         live.innerHTML = "";
       }
     }
-    // Klavye desteği (eski tarayıcılar için sade)
-    document.onkeydown = function(e) {
-      e = e || window.event;
-      var key = e.keyCode || e.which;
-      // Rakamlar
-      if (key >= 48 && key <= 57) insert(String.fromCharCode(key));
-      // Numpad rakamlar
-      if (key >= 96 && key <= 105) insert(String(key - 96));
-      // Nokta
-      if (key == 190 || key == 110) insert('.');
-      // Operatörler
-      if (key == 107) insert('+');
-      if (key == 109) insert('-');
-      if (key == 106) insert('*');
-      if (key == 111) insert('/');
-      if (key == 13) calculate(); // Enter
-      if (key == 8) { backspace(); e.preventDefault(); }
-      if (key == 27) clearDisplay(); // Escape
-      if (key == 53 && e.shiftKey) insert('%');
-      if (key == 57 && e.shiftKey) insert('(');
-      if (key == 48 && e.shiftKey) insert(')');
-      setTimeout(updateLiveResult, 1);
-    };
     updateLiveResult();
   </script>
 </body>
